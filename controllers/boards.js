@@ -71,8 +71,15 @@ module.exports = (dataLoader) => {
 
   // Create a new bookmark under a board
   boardsController.post('/:id/bookmarks', onlyLoggedIn, (req, res) => {
-    // TODO: this is up to you to implement :)
-    res.status(500).json({ error: 'not implemented' });
+    // IMPLEMENTED
+    dataLoader.createBookmark({
+      boardId: req.params.id,
+      title: req.body.title,
+      description: req.body.description,
+      url: req.body.url
+    })
+    .then(data => res.status(201).json(data))
+    .catch(err => res.status(400).json(err));
   });
 
   return boardsController;
