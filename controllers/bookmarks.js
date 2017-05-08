@@ -7,6 +7,12 @@ module.exports = (dataLoader) => {
 
   // Modify a bookmark
   bookmarksController.patch('/:id', onlyLoggedIn, (req, res) => {
+    dataLoader.bookmarkBelongsToUser(req.params.id, req.user.id)
+    .then(() => {
+      return dataLoader.updateBookmark({
+        title: req.body.title,
+        url: req.body.url
+      });
     // TODO: this is up to you to implement :)
     res.status(500).json({ error: 'not implemented' });
   });
@@ -14,6 +20,7 @@ module.exports = (dataLoader) => {
 
   // Delete a bookmark
   bookmarksController.delete('/:id', onlyLoggedIn, (req, res) => {
+    dataLoader.bookmarkBelongsToUser(req.params.id, req.user.id)
     // TODO: this is up to you to implement :)
     res.status(500).json({ error: 'not implemented' });
   });
