@@ -39,7 +39,7 @@ module.exports = (dataLoader) => {
   // Modify an owned board
   boardsController.patch('/:id', onlyLoggedIn, (req, res) => {
     // First check if the board to be PATCHed belongs to the user making the request
-    dataLoader.boardBelongsToUser(req.params.id, req.user.id)
+    dataLoader.boardBelongsToUser(req.params.id, req.user.users_id)
     .then(() => {
       return dataLoader.updateBoard(req.params.id, {
         title: req.body.title,
@@ -54,7 +54,7 @@ module.exports = (dataLoader) => {
   // Delete an owned board
   boardsController.delete('/:id', onlyLoggedIn, (req, res) => {
     // First check if the board to be DELETEd belongs to the user making the request
-    dataLoader.boardBelongsToUser(req.params.id, req.user.id)
+    dataLoader.boardBelongsToUser(req.params.id, req.user.users_id)
     .then(() => {
       return dataLoader.deleteBoard(req.params.id);
     })
