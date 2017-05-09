@@ -7,12 +7,15 @@ module.exports = (dataLoader) => {
 
   // Modify a bookmark
   bookmarksController.patch('/:id', onlyLoggedIn, (req, res) => {
-    dataLoader.bookmarkBelongsToUser(req.params.id, req.user.id)
+    console.log(req.user.users_id);
+    dataLoader.bookmarkBelongsToUser(req.params.id, req.user.users_id)
     .then(() => {
+      console.log('hello');
       return dataLoader.updateBookmark({
         title: req.body.title,
         description: req.body.description,
         id: req.params.id,
+        ownerId: req.user.users_id,
         url: req.body.url
       });
     })
@@ -25,7 +28,7 @@ module.exports = (dataLoader) => {
 
   // Delete a bookmark
   bookmarksController.delete('/:id', onlyLoggedIn, (req, res) => {
-    dataLoader.bookmarkBelongsToUser(req.params.id, req.user.id)
+    dataLoader.bookmarkBelongsToUser(req.params.id, req.user.users_id)
     .then(() => {
       return dataLoader.deleteBookmark(req.params.id);
     })

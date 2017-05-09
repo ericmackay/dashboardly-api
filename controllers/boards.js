@@ -26,7 +26,6 @@ module.exports = (dataLoader) => {
 
   // Create a new board
   boardsController.post('/', onlyLoggedIn, (req, res) => {
-    console.log(req.body);
     dataLoader.createBoard({
       ownerId: req.body.ownerId,
       title: req.body.title,
