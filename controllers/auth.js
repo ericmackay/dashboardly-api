@@ -1,6 +1,6 @@
 const express = require('express');
-
 const onlyLoggedIn = require('../lib/only-logged-in');
+const crypto = require('crypto');
 
 module.exports = (dataLoader) => {
   const authController = express.Router();
@@ -41,8 +41,16 @@ module.exports = (dataLoader) => {
 
   // Retrieve current user
   authController.get('/me', onlyLoggedIn, (req, res) => {
-    // TODO: this is up to you to implement :)
-    res.status(500).json({ error: 'not implemented' });
+    dataLoader.getUserFromSession(req.sessionToken)
+    .then((user) => {
+      return {
+        avatarUrl: `https://www.gravatar.com/avatar/${crypto.createHash('md5').update(user.users_email).digest('hex')}`,
+        userId: user.users_id,
+        email: user.users_email
+      };
+    })
+      .then(user => res.status(201).json(user))
+      .catch(err => res.status(400).json(err));
   });
 
   return authController;
