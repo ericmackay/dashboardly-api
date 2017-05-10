@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('promise-mysql');
+const cors = require('express-cors');
 
 // Express middleware
 const bodyParser = require('body-parser');
@@ -33,6 +34,10 @@ app.use(checkLoginToken(dataLoader));
 app.use('/auth', authController(dataLoader));
 app.use('/boards', boardsController(dataLoader));
 app.use('/bookmarks', bookmarksController(dataLoader));
+
+app.use(cors({
+  allowedOrigins: ['localhost']
+}));
 
 
 // Start the server
