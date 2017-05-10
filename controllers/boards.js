@@ -78,11 +78,14 @@ module.exports = (dataLoader) => {
   // Create a new bookmark under a board
   boardsController.post('/:id/bookmarks', onlyLoggedIn, (req, res) => {
     // IMPLEMENTED
-    dataLoader.createBookmark({
-      boardId: req.params.id,
-      title: req.body.title,
-      description: req.body.description,
-      url: req.body.url
+    dataLoader.boardBelongsToUser(req.params.id, req.user.users_id)
+    .then(() => {
+      return dataLoader.createBookmark({
+        boardId: req.params.id,
+        title: req.body.title,
+        description: req.body.description,
+        url: req.body.url
+      });
     })
     .then(data => res.status(201).json(data))
     .catch(err => res.status(400).json(err));
