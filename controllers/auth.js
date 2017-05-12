@@ -12,7 +12,10 @@ module.exports = (dataLoader) => {
       password: req.body.password
     })
     .then(user => res.status(201).json(user))
-    .catch(err => res.status(400).json(err));
+    .catch((err) => {
+      console.log('err', err);
+      res.status(400).json(err);
+    });
   });
 
 
@@ -29,6 +32,7 @@ module.exports = (dataLoader) => {
 
   // Delete a session (logout)
   authController.delete('/sessions', onlyLoggedIn, (req, res) => {
+    console.log(req.sessionToken, '+', req.body.token);
     if (req.sessionToken === req.body.token) {
       dataLoader.deleteToken(req.body.token)
       .then(() => res.status(204).end())
@@ -41,6 +45,7 @@ module.exports = (dataLoader) => {
 
   // Retrieve current user
   authController.get('/me', onlyLoggedIn, (req, res) => {
+    console.log(req.sessionToken);
     dataLoader.getUserFromSession(req.sessionToken)
     .then((user) => {
       return {
